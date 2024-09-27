@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 
+
 @Component({
   selector: 'app-nav',
   standalone: true,
@@ -24,7 +25,11 @@ export class NavComponent {
         console.log("Se ha producido un error");
         console.log(error);
       }
-    })
+    });
+  }
+
+  logout(): void {
+    this.loggedIn= false ;
   }
 
 
