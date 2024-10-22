@@ -1,6 +1,5 @@
 namespace API.Controllers;
 using API.Data;
-using API.DataEntities;
 using API.DTOs;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -10,47 +9,29 @@ using Microsoft.AspNetCore.Mvc;
 public class UsersController : BaseApiController
 {
     private readonly IUserRepository _repository;
-    private readonly IMapper _mapper;
 
-    public UsersController(IUserRepository repository, IMapper mapper)
+    public UsersController(IUserRepository repository)
     {
         _repository = repository;
-        _mapper = mapper;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MemberResponse>>> GetAllAsync()
     {
-        var users = await _repository.GetAllAsync();
-
-        var response = _mapper.Map<IEnumerable<MemberResponse>>(users);
-
-        return Ok(response);
+        var members = await _repository.GetMembersAsync();
+        return Ok(members);
     }
 
-    [HttpGet("{id:int}")] // api/v1/users/2
-    public async Task<ActionResult<MemberResponse>> GetUsersByIdAsync(int id)
+    [HttpGet("{username}")] // api/users/Calamardo
+    public async Task<ActionResult<MemberResponse>> GetByUsernameAsync(string username)
     {
-        var user = await _repository.GetByIdAsync(id);
+        var member = await _repository.GetMemberAsync(username);
 
-        if (user == null)
+        if (member == null)
         {
             return NotFound();
         }
 
-        return _mapper.Map<MemberResponse>(user);
-    }
-
-    [HttpGet("{username}")] // api/v1/users/Calamardo
-    public async Task<ActionResult<MemberResponse>> GetByIdAsync(string username)
-    {
-        var user = await _repository.GetByUsernameAsync(username);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return _mapper.Map<MemberResponse>(user);
+        return member;
     }
 }
