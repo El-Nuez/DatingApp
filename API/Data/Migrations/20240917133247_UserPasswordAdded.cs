@@ -1,9 +1,11 @@
-﻿#nullable disable
+﻿﻿#nullable disable
 
 namespace API.Data.Migrations
 {
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.EntityFrameworkCore.Migrations;
 
+    [ExcludeFromCodeCoverage]
     /// <inheritdoc />
     public partial class UserPasswordAdded : Migration
     {
