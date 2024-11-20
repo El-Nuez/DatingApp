@@ -51,7 +51,6 @@ public class APIWebApplicationFactory<IStartup> : WebApplicationFactory<Startup>
             // Hence anything written in this will override that setting (except EF Sql DBContext)
             .ConfigureTestServices(async services =>
             {
-                // Build the service provider.
                 var sp = services.BuildServiceProvider();
 
                 using (var scope = sp.CreateScope())
@@ -60,13 +59,19 @@ public class APIWebApplicationFactory<IStartup> : WebApplicationFactory<Startup>
 
                     try
                     {
-                        await context.Database.MigrateAsync();
+                        await context.Database.EnsureCreatedAsync();
+                        // Limpia los usuarios existentes
+                        var allUsers = await context.Users.ToListAsync();
+                        context.Users.RemoveRange(allUsers);
+                        await context.SaveChangesAsync();
+
+                        // Seed desde JSON
                         await Seed.SeedUsersAsync(context);
                     }
                     catch (Exception ex)
                     {
                         var logger = sp.GetRequiredService<ILogger<Program>>();
-                        logger.LogError(ex, "An error has occurred during migration/seeding.");
+                        logger.LogError(ex, "Error al realizar la migración o el seed.");
                     }
                 }
             });
