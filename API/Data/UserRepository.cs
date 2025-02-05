@@ -1,5 +1,6 @@
 namespace API.Data;
 
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DataEntities;
@@ -35,7 +36,9 @@ public class UserRepository(DataContext context, IMapper mapper) : IUserReposito
         => await context.Users
                 .ProjectTo<MemberResponse>(mapper.ConfigurationProvider)
                 .ToListAsync();
-
+    
+    public async Task<object?> GetUserByIdAsync(int v) => throw new NotImplementedException();
+    
     public async Task<bool> SaveAllAsync()
         => await context.SaveChangesAsync() > 0;
 

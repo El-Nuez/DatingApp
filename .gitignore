@@ -487,3 +487,7 @@ $RECYCLE.BIN/
 
 API/dating.db-shm
 API/dating.db-wal
+
+
+coveragereport
+TestResult
