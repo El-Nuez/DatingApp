@@ -48,6 +48,16 @@ export class PhotoEditorComponent implements OnInit{
       }
     });
   }
+
+  deletePhoto(photo: Photo) {
+    this.memberService.DeletePhoto(photo).subscribe({
+      next: _ => {
+        const updateMember = {...this.member()};
+        updateMember.photos = updateMember.photos.filter(p => p.id !== photo.id);
+        this.memberChange.emit(updateMember);
+      }
+    });
+  }
   
   fileOverBase(e: any) {
     this.hasBaseDropZoneOver = e;
