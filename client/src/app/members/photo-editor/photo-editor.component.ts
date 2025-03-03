@@ -50,7 +50,7 @@ export class PhotoEditorComponent implements OnInit{
   }
 
   deletePhoto(photo: Photo) {
-    this.memberService.DeletePhoto(photo).subscribe({
+    this.memberService.deletePhoto(photo).subscribe({
       next: _ => {
         const updateMember = {...this.member()};
         updateMember.photos = updateMember.photos.filter(p => p.id !== photo.id);
