@@ -3,6 +3,7 @@ import { inject , Injectable, signal } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { User } from '../_models/user';
 import { environment } from '../../environments/environment';
+import { LikesService } from './likes.service';
 
 
 @Injectable({
@@ -10,6 +11,7 @@ import { environment } from '../../environments/environment';
 })
 export class AccountService {
   private  http = inject (HttpClient);
+  private  likesServices = inject (LikesService);
   baseUrl = environment.apiUrl;
   currentUser = signal <User | null>(null);
 
@@ -37,6 +39,7 @@ export class AccountService {
   setCurrentUser(user: User): void {
     localStorage.setItem("user", JSON.stringify(user));
     this.currentUser.set(user)
+    this.likesServices.getLikeIds();
   }
 
 
